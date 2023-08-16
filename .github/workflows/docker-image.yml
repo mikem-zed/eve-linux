@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+env:
+ BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+ 
+on:
+  push:
+    branches: [ "eve-kernel-amd64-v6.1.38-generic" ]
+  pull_request:
+    branches: [ "eve-kernel-amd64-v6.1.38-generic" ]
+
+jobs:    
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Get commit hash
+      run: git 
+    - name: Build the Docker image
+      run: docker buildx build . --progress=plain --platform=linux/amd64 --file Dockerfile --tag intoiter/eve-kernel-amd64-v6.1.38-generic:$(date +%s)
